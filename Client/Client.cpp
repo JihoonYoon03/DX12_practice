@@ -1,12 +1,15 @@
 // Client.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
-
+#include "pch.h"
 #include "framework.h"
 #include "Client.h"
+#include "Game.h"
 
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
+WindowInfo GWindowInfo;
+
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -42,6 +45,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
+    GWindowInfo.width = 800;
+    GWindowInfo.height = 600;
+    GWindowInfo.windowed = true;
+
+    unique_ptr<Game> game = make_unique<Game>();
+    game->Init(GWindowInfo);
+
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -58,6 +68,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
         // TODO
+        game->Update();
     }
 
     return (int) msg.wParam;
@@ -84,7 +95,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_CLIENT));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_CLIENT);
+    wcex.lpszMenuName   = nullptr;
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -115,6 +126,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+   GWindowInfo.hwnd = hWnd;
 
    return TRUE;
 }
