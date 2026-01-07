@@ -71,6 +71,6 @@ void SwapChain::CreateRTV(ComPtr<ID3D12Device> device)
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
 	{
 		_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * rtvHeapSize);
-		device->CreateRenderTargetView(_rtvBuffer->Get(), nullptr, _rtvHandle[i]);
+		device->CreateRenderTargetView(_rtvBuffer[i].Get(), nullptr, _rtvHandle[i]);
 	}
 }
