@@ -11,4 +11,3 @@ public:
 public:
 	virtual void FinalUpdate() sealed {}
 };
-
